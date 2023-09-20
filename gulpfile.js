@@ -9,3 +9,22 @@ gulp.task("scripts", () => {
 
   return tsResult.js.pipe(gulp.dest("dist"));
 });
+
+gulp.task("static", () => {
+  return gulp.src(["src/**/*.json"]).pipe(gulp.dest("dist"));
+});
+
+gulp.task("clean", () => {
+  return gulp.src("dist").pipe(clean());
+});
+
+gulp.task("build", gulp.series("clean", "static", "scripts"));
+
+gulp.task(
+  "watch",
+  gulp.series("build", () => {
+    return gulp.watch(["src/**/*.ts", "src/**/*.json"], gulp.series("build"));
+  })
+);
+
+gulp.task("default", gulp.series("watch"));
