@@ -15,7 +15,7 @@ gulp.task("static", () => {
 });
 
 gulp.task("clean", () => {
-  return gulp.src("dist").pipe(clean());
+  return gulp.src("dist", { allowEmpty: true }).pipe(clean());
 });
 
 gulp.task("build", gulp.series("clean", "static", "scripts"));
