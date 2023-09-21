@@ -23,11 +23,11 @@ if (!db) {
 
     fs.readdirSync(__dirname)
       .filter((file: string) => {
-        return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js')
+        return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.ts')
       })
       .forEach((file: string) => {
         const modelDefiner = require(path.join(__dirname, file));
-        const model = modelDefiner(sequelize, DataTypes);
+        const model = modelDefiner['default'](sequelize, DataTypes); // Chame a função para obter o modelo
         db[model.name] = model;
       })
 
