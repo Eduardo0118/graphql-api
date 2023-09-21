@@ -1,5 +1,6 @@
 import { Model, Sequelize, DataTypes, ModelCtor, CreateOptions } from 'sequelize';
 import { BaseModelInterface } from '../interfaces/BaseModelInterface';
+import { compareSync, genSaltSync, hashSync } from 'bcryptjs';
 
 export interface UserAttributes {
     id?: number;
@@ -50,13 +51,14 @@ export default (sequelize: Sequelize, dataTypes: typeof DataTypes): UserModel =>
         tableName: 'users',
         hooks: {
             beforeCreate: (user: UserInstance, options: CreateOptions): void => {
-
+                const salt = genSaltSync();
+                user.password = hashSync(user.password, salt)
             }
         }
     }) as UserModel;
 
     User.prototype.isPassword = (encodedPassword: string, password: string) => {
-        return true;
+        return compareSync(password, encodedPassword)
     };
 
     return User;
